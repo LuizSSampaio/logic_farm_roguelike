@@ -38,18 +38,14 @@ fn character_movement(
     input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
+    let speed = 100.0;
+
     for (mut transform, _) in &mut characters {
-        if input.pressed(KeyCode::W) {
-            transform.translation.y += 100.0 * time.delta_seconds();
-        }
-        if input.pressed(KeyCode::S) {
-            transform.translation.y -= 100.0 * time.delta_seconds();
-        }
-        if input.pressed(KeyCode::D) {
-            transform.translation.x += 100.0 * time.delta_seconds();
-        }
-        if input.pressed(KeyCode::A) {
-            transform.translation.x -= 100.0 * time.delta_seconds();
-        }
+        let mut dir = Vec2::ZERO;
+        dir.x = ((input.pressed(KeyCode::D) as i8) - (input.pressed(KeyCode::A) as i8)) as f32;
+        dir.y = ((input.pressed(KeyCode::W) as i8) - (input.pressed(KeyCode::S) as i8)) as f32;
+
+        let z = transform.translation.z;
+        transform.translation += Vec3::new(dir.x, dir.y, z) * speed * time.delta_seconds();
     }
 }
