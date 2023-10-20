@@ -4,6 +4,7 @@ use bevy::{
 use bevy_inspector_egui::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use pig::PigPlugin;
+use ui::GameUI;
 
 #[derive(Component, InspectorOptions, Default, Reflect)]
 #[reflect(Component, InspectorOptions)]
@@ -15,6 +16,7 @@ pub struct Player {
 pub struct Money(pub f32);
 
 mod pig;
+mod ui;
 
 fn main() {
     App::new()
@@ -35,7 +37,7 @@ fn main() {
             WorldInspectorPlugin::default().run_if(input_toggle_active(true, KeyCode::Escape)),
         )
         .insert_resource(Money(100.0))
-        .add_plugins(PigPlugin)
+        .add_plugins((PigPlugin, GameUI))
         .add_systems(Startup, setup)
         .add_systems(Update, character_movement)
         .run();
